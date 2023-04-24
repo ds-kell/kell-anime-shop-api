@@ -4,18 +4,21 @@ import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
-@Data
 @Entity
-@Table(name = "authorities")
-public class Authority {
+@Table(name = "shippingservice")
+@Data
+public class ShippingService {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @NotNull
     @Column(name = "name")
     private String name;
-    @Column(name = "description")
+    @Column(name = "cost")
+    private float cost;
+//    @Column(name = "time")
+//    private Date time;
     @Type(type = "text")
     private String description;
 }

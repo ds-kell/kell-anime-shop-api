@@ -1,0 +1,3 @@
+token for authentication
+"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyIiwiaWF0IjoxNjgyMjU3NDA1LCJleHAiOjE2ODIyNTc0NzV9.c8GHDLzxXgnVr9oqQQGFsGfESM8eOA5u__qRT7XWOLIWw6uZ3LGTF8Bq2kQmi-CGtTsX5YJfBBXWMTmnnFBLXQ",
+"type": "Bearer",

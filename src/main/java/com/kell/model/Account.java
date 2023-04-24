@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,9 +35,10 @@ public class Account {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "accountauthority",
-			joinColumns = @JoinColumn(name = "id"),
-			inverseJoinColumns = @JoinColumn(name = "account_id"))
-
+			joinColumns = @JoinColumn(name = "account_id"),
+			inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private Set<Authority> authorities = new HashSet<>();
-
+	@OneToOne(mappedBy = "account")
+	private Profile profile;
+//	private Date createDate;
 }
