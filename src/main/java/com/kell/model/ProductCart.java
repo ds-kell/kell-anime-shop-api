@@ -13,9 +13,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "product_cart")
 public class ProductCart {
     @EmbeddedId
     private ProductCartKey id;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("cartId")

@@ -8,11 +8,11 @@
 		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>figure-shop-api</groupId>
-	<artifactId>figure-shop-api</artifactId>
+	<groupId>wibu-shop-api</groupId>
+	<artifactId>wibu-shop-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>figure-shop-api</name>
-	<description>Based figure shop api using spring boot</description>
+	<name>wibu-shop-api</name>
+	<description>Based wibu shop api using spring boot</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

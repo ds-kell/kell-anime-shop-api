@@ -46,7 +46,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Ecommerce api",
+                "Wibu-shop-api",
                 "Some custom description of API.",
                 "1.0",
                 "Terms of service",

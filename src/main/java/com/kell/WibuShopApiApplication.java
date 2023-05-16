@@ -6,9 +6,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class FigureShopApiApplication {
+public class WibuShopApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FigureShopApiApplication.class, args);
+		SpringApplication.run(WibuShopApiApplication.class, args);
 	}
 }

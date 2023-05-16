@@ -34,11 +34,12 @@ public class Account {
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
-			name = "accountauthority",
+			name = "account_authorities",
 			joinColumns = @JoinColumn(name = "account_id"),
 			inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private Set<Authority> authorities = new HashSet<>();
 	@OneToOne(mappedBy = "account")
 	private Profile profile;
-//	private Date createDate;
+	@Column(name="create_date")
+	private Date createDate;
 }

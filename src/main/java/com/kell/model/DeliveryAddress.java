@@ -18,7 +18,7 @@ public class DeliveryAddress {
     private String province;
     private String district;
     private String ward;
-    @Column(name = "specificAddress")
+    @Column(name = "specific_address")
     private String specificAddress;
     @Type(type = "text")
     private String content;

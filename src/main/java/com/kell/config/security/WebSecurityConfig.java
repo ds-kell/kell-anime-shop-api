@@ -32,6 +32,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/admin/auth/**").permitAll()
                 .antMatchers( "/configuration/ui",
                         "/configuration/security",
                         "/swagger-ui.html",
@@ -39,7 +40,6 @@ public class WebSecurityConfig {
                         "/v2/api-docs",
                         "/webjars/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
-                .antMatchers("/api/admin/auth/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/products").permitAll()
 //                .anyRequest().authenticated();
                 .anyRequest().permitAll();

@@ -21,7 +21,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +41,10 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
-
+    private final CartRepository cartRepository;
+    private final ProfileRepository profileRepository;
     @Override
+    @Transactional
     public JwtResponse authenticateAccount(LoginRequest loginRequest) {
 
         try {
@@ -64,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void registerAccount(SignupRequest signupRequest) {
         if (accountRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail()))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");
@@ -88,10 +95,11 @@ public class AuthServiceImpl implements AuthService {
         account.setAuthorities(authorities);
         accountRepository.save(account);
 
+        profileRepository.save(Profile.builder().account(account).build());
+
         //Create cart if account have role customer
-//        if (authorities.stream().map(Authority::getName).collect(Collectors.toList()).contains(AuthoritiesConstants.CUSTOMER))
-//            cartRepository.save(Cart.builder()
-//                    .createdDate(Instant.now())
-//                    .account(account).build());
+        if (authorities.stream().map(Authority::getName).collect(Collectors.toList()).contains(AuthoritiesConstants.CUSTOMER))
+            cartRepository.save(Cart.builder()
+                    .account(account).build());
     }
 }
