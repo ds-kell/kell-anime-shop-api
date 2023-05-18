@@ -1,5 +1,6 @@
 package com.kell.service.impl;
 
+import com.kell.model.ShippingService;
 import com.kell.repository.ShippingServiceRepository;
 import com.kell.service.ShippingServiceService;
 import com.kell.service.utils.MappingHelper;
@@ -18,10 +19,7 @@ public class ShippingServiceServiceImpl implements ShippingServiceService {
     private final ShippingServiceRepository shippingServiceRepository;
     private final MappingHelper mappingHelper;
     @Override
-    public List<ShippingServiceDto> getAllShippingService() {
-        return shippingServiceRepository.findAll()
-                .stream()
-                .map( e -> mappingHelper.map(e, ShippingServiceDto.class))
-                .collect(Collectors.toList());
+    public List<ShippingService> getAllShippingService() {
+        return shippingServiceRepository.findAll();
     }
 }

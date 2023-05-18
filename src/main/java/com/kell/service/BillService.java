@@ -14,7 +14,7 @@ public interface BillService {
 
     BillDto getBillById(Integer billId);
 
-//    List<BillDto> getCustomBills(BillCriteria billCriteria);
+    List<BillDto> getCustomBills(BillCriteria billCriteria);
 
     void updateBillStatus(BillStatusUpdateReq billStatusUpdateReq);
 }

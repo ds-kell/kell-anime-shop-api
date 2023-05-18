@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/user/address")
-@CrossOrigin("*")
+@CrossOrigin
 @RequiredArgsConstructor
 public class DeliveryAddressResource {
     private final DeliveryAddressService deliveryAddressService;
