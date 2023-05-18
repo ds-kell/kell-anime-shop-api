@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProductService {
 
-//    List<ProductDetailDto>getProductDetailsByProductId(Integer productId);
+    List<ProductDetailDto>getProductDetailsByProductId(Integer productId);
 
     List<ProductDto> getProducts();
 

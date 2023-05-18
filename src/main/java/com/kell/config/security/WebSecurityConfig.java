@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/admin/auth/**").permitAll()
+                .antMatchers("/api/user/auth/**").permitAll()
                 .antMatchers( "/configuration/ui",
                         "/configuration/security",
                         "/swagger-ui.html",

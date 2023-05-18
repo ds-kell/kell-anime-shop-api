@@ -32,4 +32,14 @@ public class ProductServiceImpl implements ProductService {
                 .map(e -> mappingHelper.map(e, ProductDto.class))
                 .collect(Collectors.toList());
     }
+    @Override
+    @Transactional
+    public List<ProductDetailDto> getProductDetailsByProductId(Integer productId) {
+        return productDetailRepository.findByProduct_Id(productId)
+                .stream().map(e -> {
+                    var productDetailDto = mappingHelper.map(e, ProductDetailDto.class);
+                    productDetailDto.setProductDto(mappingHelper.map(e.getProduct(), ProductDto.class));
+                    return productDetailDto;
+                }).collect(Collectors.toList());
+    }
 }

@@ -10,6 +10,7 @@ import com.kell.service.CartService;
 import com.kell.service.utils.MappingHelper;
 import com.kell.webapp.dto.ProductCartDto;
 import com.kell.webapp.dto.ProductDetailDto;
+import com.kell.webapp.dto.ProductDto;
 import com.kell.webapp.dto.request.AddToCartReq;
 import com.kell.webapp.exception.EntityNotFoundException;
 import com.kell.webapp.exception.ServiceException;
@@ -41,7 +42,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() ->
                         new EntityNotFoundException(ProductDetail.class.getName(), addToCartReq.getProductDetailId().toString()));
         var productCart = productCartRepository
-                .findByCart_IdAndAndProductDetail_Id(cart.getId(), productDetail.getId())
+                .findByCart_IdAndProductDetail_Id(cart.getId(), productDetail.getId())
                 .orElseGet(() -> ProductCart.builder()
                         .id(new ProductCartKey(cart.getId(), productDetail.getId()))
                         .cart(cart)
@@ -61,7 +62,11 @@ public class CartServiceImpl implements CartService {
         return productCartRepository.findByCart_Id(cart.getId()).stream()
                 .map(e -> {
                     var productCart = mappingHelper.map(e, ProductCartDto.class);
-                    productCart.setProductDetailDto(mappingHelper.map(e.getProductDetail(), ProductDetailDto.class));
+                    var productDetail = e.getProductDetail();
+                    var productDetailDto = mappingHelper.map(productDetail, ProductDetailDto.class);
+                    productDetailDto.setProductDto(mappingHelper.map(productDetail.getProduct(), ProductDto.class));
+                    productCart.setProductDetailDto(productDetailDto);
+
                     return productCart;
                 })
                 .collect(Collectors.toList());
@@ -72,7 +77,7 @@ public class CartServiceImpl implements CartService {
     public void removeProductCart(Integer productDetailId) {
         var cart = getCartCurrentUser();
         var productCart = productCartRepository
-                .findByCart_IdAndAndProductDetail_Id(cart.getId(), productDetailId)
+                .findByCart_IdAndProductDetail_Id(cart.getId(), productDetailId)
                 .orElseThrow(() -> new ServiceException("Not found product in cart", ""));
         productCartRepository.delete(productCart);
     }
