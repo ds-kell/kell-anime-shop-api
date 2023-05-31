@@ -10,10 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BillReq {
-    private String paymentMethod;
-//    private String descriptionPay;
-//    private List<Integer> productCartIds;
-    private float totalAmount;
-    private Integer addressId;
+    private List<Integer> productsCartId;
+    private Integer deliveryAddressId;
     private Integer shippingServiceId;
+    private String paymentMethod;
 }

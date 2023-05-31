@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/sales/order")
+@RequestMapping("/api/user/order")
 @CrossOrigin
 @RequiredArgsConstructor
 public class BillResource {

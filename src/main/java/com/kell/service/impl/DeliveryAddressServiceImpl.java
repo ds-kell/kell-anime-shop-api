@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -23,12 +24,22 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
     private final AccountRepository accountRepository;
     private final MappingHelper mappingHelper;
     @Override
+    @Transactional
     public DeliveryAddressDto getDefaultDeliveryAddressCurrentAccount() {
         var addressDefault = deliveryAddressRepository.findByAccount_UsernameAndDefaultAddress(getCurrentUsernameAccount(), true);
         if (addressDefault.isPresent())
             return mappingHelper.map(addressDefault, DeliveryAddressDto.class);
         return new DeliveryAddressDto();
     }
+//    @Override
+//    @Transactional
+//    public DeliveryAddress getDefaultDeliveryAddressCurrentAccount() {
+//        var addressDefault = deliveryAddressRepository.findByAccount_UsernameAndDefaultAddress(getCurrentUsernameAccount(), true);
+//        if (addressDefault.isPresent()){
+//            addressDefault.get();
+//        }
+//        return new DeliveryAddress();
+//    }
 
     @Override
     public List<DeliveryAddressDto> getAllDeliveryAddressCurrentAccount() {

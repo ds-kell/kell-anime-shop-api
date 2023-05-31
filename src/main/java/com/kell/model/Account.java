@@ -38,7 +38,8 @@ public class Account {
 			joinColumns = @JoinColumn(name = "account_id"),
 			inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private Set<Authority> authorities = new HashSet<>();
-	@OneToOne(mappedBy = "account")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	@JsonIgnore
 	private Profile profile;
 	@Column(name="create_date")
 	private Date createDate;

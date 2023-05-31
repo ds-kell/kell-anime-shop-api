@@ -1,13 +1,16 @@
 package com.kell.service.impl;
 
 
+import com.kell.model.Bill;
 import com.kell.model.Product;
+import com.kell.model.ProductDetail;
 import com.kell.repository.ProductDetailRepository;
 import com.kell.repository.ProductRepository;
 import com.kell.service.ProductService;
 import com.kell.service.utils.MappingHelper;
 import com.kell.webapp.dto.ProductDetailDto;
 import com.kell.webapp.dto.ProductDto;
+import com.kell.webapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +32,17 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProducts() {
         return productRepository.findAll()
                 .stream()
-                .map(e -> mappingHelper.map(e, ProductDto.class))
+                .map(e -> {
+                    var res = mappingHelper.map(e, ProductDto.class);
+                    var productDetail = productDetailRepository.findFirstByProduct_Id(e.getId());
+                    if(productDetail.isPresent()){
+                        res.setPrice(productDetail.get().getPrice());
+                    }
+                    else{
+                        res.setPrice(0);
+                    }
+                    return  res;
+                })
                 .collect(Collectors.toList());
     }
     @Override

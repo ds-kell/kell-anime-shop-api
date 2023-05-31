@@ -32,9 +32,6 @@ public class Bill {
     @ManyToOne
     @JoinColumn(name = "shipping_service_id")
     private ShippingService shippingService;
-    @OneToMany(mappedBy = "bill")
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     List<ProductBill> productBills;
-//    @ManyToOne
-//    @JoinColumn(name = "order_type_id")
-//    private OrderType orderType;
 }

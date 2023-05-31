@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/size")
+@RequestMapping("/api/product/size")
 @RequiredArgsConstructor
 @CrossOrigin
 public class SizeResource {

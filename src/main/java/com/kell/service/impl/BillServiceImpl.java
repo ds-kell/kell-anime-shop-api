@@ -14,9 +14,12 @@ import com.kell.webapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,57 +35,51 @@ public class BillServiceImpl implements BillService {
     private final AccountRepository accountRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
     private final ShippingServiceRepository shippingServiceRepository;
+    private final ProductDetailRepository productDetailRepository;
     private final MappingHelper mappingHelper;
 
     @Override
+    @Transactional
     public void createBillByCurrentAccount(BillReq billReq) {
         Bill bill = mappingHelper.map(billReq, Bill.class);
         bill.setStatus(OrderStatus.PENDING);
         bill.setPaymentTime(new Date());
-
         var account = getCurrentAccount();
         bill.setAccount(account);
-
-        var addressResource = deliveryAddressRepository.findById(billReq.getAddressId())
+        var address = deliveryAddressRepository.findById(billReq.getDeliveryAddressId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        DeliveryAddress.class.getName(), billReq.getAddressId().toString()));
-
-        DeliveryAddress address = mappingHelper.map(addressResource, DeliveryAddress.class);
-//        address.setContent(addressResource.getContent());
-//        address.setDistrict(addressResource.getDistrict());
-//        address.setProvince(addressResource.getProvince());
-//        address.setWard(addressResource.getWard());
-//        address.setReceiver(addressResource.getReceiver());
-//        address.setPhoneNumber(addressResource.getPhoneNumber());
-
-        deliveryAddressRepository.save(address);
-
+                        ShippingService.class.getName(), billReq.getDeliveryAddressId().toString()));
         bill.setDeliveryAddress(address);
 
         var shippingService = shippingServiceRepository.findById(billReq.getShippingServiceId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         ShippingService.class.getName(), billReq.getShippingServiceId().toString()));
         bill.setShippingService(shippingService);
-
+        List<Integer> ids = billReq.getProductsCartId();
         var cart = getCartCurrentUser();
-//        kiểm tra các sản phẩm đã check
-//        var productCartChecked = productCartRepository.findByCart_IdAndChecked(cart.getId(), true);
-
-//        List<ProductBill> productBills = productCartChecked
-//                .stream().map(e -> {
-//                    ProductBill productBill = new ProductBill();
-//                    productBill.setBill(bill);
-//                    productBill.setProductDetail(e.getProductDetail());
-//                    productBill.setQuantity(e.getQuantity());
-//                    return productBill;
-//                }).collect(Collectors.toList());
-
+        List<ProductBill> productBills = new ArrayList<>();
+        for (Integer id : ids) {
+            ProductCart productCart = productCartRepository.findByCart_IdAndProductDetail_Id(cart.getId(), id)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            ShippingService.class.getName(), id.toString()));
+            ProductDetail productDetail = productCart.getProductDetail();
+            ProductBill productBill = new ProductBill();
+            productBill.setBill(bill);
+            productBill.setQuantity(productCart.getQuantity());
+            productBill.setProductDetail(productDetail);
+            productDetail.setCountInStock(productDetail.getCountInStock() - productCart.getQuantity());
+            productBills.add(productBill);
+            productDetailRepository.save(productDetail);
+        }
         billRepository.save(bill);
-//        productBillRepository.saveAll(productBills);
-//        productCartRepository.deleteAll(productCartChecked);
+        productBillRepository.saveAll(productBills);
+        for (Integer id : ids) {
+            productCartRepository.deleteByCart_IdAndProductDetail_Id(cart.getId(), id);
+        }
     }
 
     @Override
+    @Transactional
     public List<BillDto> getBillsOfCurrentAccount() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return billRepository.findByAccount_Username(username)
@@ -97,20 +94,14 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional
     public List<BillDto> getCustomBills(BillCriteria billCriteria) {
-        return billRepository.findAll((Sort) billCriteria.toSpecification()).stream()
-                .map(this::mapToBillDto).collect(Collectors.toList());
-    }
+        Specification<Bill> specification = billCriteria.toSpecification();
+        Sort sort = Sort.by(Sort.Direction.DESC, "paymentTime");
 
-    @Override
-    public void updateBillStatus(BillStatusUpdateReq billStatusUpdateReq) {
-        if (OrderStatus.LIST_STATUS.contains(billStatusUpdateReq.getStatus())) {
-            var bill = billRepository.findById(billStatusUpdateReq.getBillId())
-                    .orElseThrow(() -> new EntityNotFoundException(Bill.class.getName(),
-                            billStatusUpdateReq.getBillId().toString()));
-            bill.setStatus(billStatusUpdateReq.getStatus());
-            billRepository.save(bill);
-        }
+        return billRepository.findAll(specification, sort).stream()
+                .map(bill -> mapToBillDto((Bill) bill)).collect(Collectors.toList());
+
     }
 
     private BillDto mapToBillDto(Bill bill) {
@@ -132,6 +123,18 @@ public class BillServiceImpl implements BillService {
 
         return billDto;
     }
+
+    @Override
+    public void updateBillStatus(BillStatusUpdateReq billStatusUpdateReq) {
+        if (OrderStatus.LIST_STATUS.contains(billStatusUpdateReq.getStatus())) {
+            var bill = billRepository.findById(billStatusUpdateReq.getBillId())
+                    .orElseThrow(() -> new EntityNotFoundException(Bill.class.getName(),
+                            billStatusUpdateReq.getBillId().toString()));
+            bill.setStatus(billStatusUpdateReq.getStatus());
+            billRepository.save(bill);
+        }
+    }
+
 
     private Account getCurrentAccount() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

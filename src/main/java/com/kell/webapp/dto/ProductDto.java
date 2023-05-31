@@ -24,6 +24,7 @@ public class ProductDto {
     private Discount discount;
     private List<ProductImage> images;
     private String description;
+    private float price;
     @Override
     public String toString() {
         return this.name + " " + this.code + " " + this.brand;

@@ -1,6 +1,6 @@
 package com.kell.webapp.rest.product;
 
-import com.kell.service.BrandService;
+import com.kell.service.DiscountService;
 import com.kell.webapp.dto.response.utils.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
 @CrossOrigin
-public class BrandResource {
-    private final BrandService brandService;
-    @GetMapping("/brands")
-    public ResponseEntity<?> getAllBrands(){
-        return ResponseUtils.ok(brandService.getAllBrands());
+public class DiscountResource {
+    private final DiscountService discountService;
+    @GetMapping("/discounts")
+    public ResponseEntity<?> getDiscounts(){
+        return ResponseUtils.ok(discountService.getAllDiscount());
     }
 }
