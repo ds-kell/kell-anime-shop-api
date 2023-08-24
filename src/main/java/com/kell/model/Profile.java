@@ -8,8 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,8 +18,10 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-//    private String firstname;
-//    private String lastname;
+/**
+ * private String firstname;
+ * private String lastname;
+ */
     @Column(name = "full_name")
     private String fullName;
     @Column(name = "phone_number")

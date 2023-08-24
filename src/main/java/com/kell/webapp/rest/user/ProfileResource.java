@@ -2,13 +2,12 @@ package com.kell.webapp.rest.user;
 
 
 import com.kell.service.ProfileService;
+import com.kell.webapp.dto.request.BillStatusUpdateReq;
+import com.kell.webapp.dto.request.ProfileRequest;
 import com.kell.webapp.dto.response.utils.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,7 +18,13 @@ public class ProfileResource {
     private final ProfileService profileService;
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile(){
-        return ResponseUtils.ok(profileService.getUserProfile());
+    public ResponseEntity<?> getUserProfile() {
+        return ResponseUtils.ok("success", profileService.getUserProfile());
+    }
+
+    @PutMapping("profile/update")
+    public ResponseEntity<?> updateUserProfile(@RequestBody ProfileRequest profileRequest) {
+        profileService.updateProfile(profileRequest);
+        return ResponseUtils.ok("Updated");
     }
 }
