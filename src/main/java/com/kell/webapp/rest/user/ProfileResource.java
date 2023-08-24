@@ -2,7 +2,6 @@ package com.kell.webapp.rest.user;
 
 
 import com.kell.service.ProfileService;
-import com.kell.webapp.dto.request.BillStatusUpdateReq;
 import com.kell.webapp.dto.request.ProfileRequest;
 import com.kell.webapp.dto.response.utils.ResponseUtils;
 import lombok.RequiredArgsConstructor;
