@@ -1,7 +1,5 @@
 package com.kell.service.impl;
 
-import com.kell.model.Account;
-import com.kell.model.Profile;
 import com.kell.repository.AccountRepository;
 import com.kell.repository.ProfileRepository;
 import com.kell.service.ProfileService;
@@ -9,7 +7,6 @@ import com.kell.service.utils.MappingHelper;
 import com.kell.webapp.dto.AccountDto;
 import com.kell.webapp.dto.ProfileDto;
 import com.kell.webapp.dto.request.ProfileRequest;
-import com.kell.webapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
