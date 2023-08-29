@@ -1,7 +1,8 @@
 package com.kell.config.security;
 
-import com.kell.config.security.jwt.AuthTokenFilter;
 import com.kell.config.security.jwt.AuthEntryPointJwt;
+import com.kell.config.security.jwt.AuthTokenFilter;
+import com.kell.service.impl.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

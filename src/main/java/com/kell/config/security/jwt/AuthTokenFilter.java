@@ -1,6 +1,6 @@
 package com.kell.config.security.jwt;
 
-import com.kell.config.security.UserDetailServiceImpl;
+import com.kell.service.impl.UserDetailServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +31,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         try {
             String jwtToken = getJWTFromRequest(request);
-            if (jwtToken != null && jwtUtils.validateToken(jwtToken)){
+            if (jwtToken != null && jwtUtils.validateAccessToken(jwtToken)) {
                 String username = jwtUtils.getUsernameFromJWT(jwtToken);
 
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
@@ -56,7 +56,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private String getJWTFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
     }

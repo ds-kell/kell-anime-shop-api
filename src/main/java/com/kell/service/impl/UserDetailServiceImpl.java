@@ -1,4 +1,4 @@
-package com.kell.config.security;
+package com.kell.service.impl;
 
 import com.kell.model.Account;
 import com.kell.repository.AccountRepository;

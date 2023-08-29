@@ -1,6 +1,8 @@
 package com.kell.config.security.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -13,7 +15,7 @@ import java.util.Date;
 public class JwtUtils {
 
 
-    public String generateJwtToken(Authentication authentication) {
+    public String generateJwtAccessToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
@@ -34,12 +36,39 @@ public class JwtUtils {
         return claims.getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateAccessToken(String token) {
         try {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
             throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+        }
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
+        String username = authentication.getName();
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + SecurityConstants.REFRESH_TOKEN_EXPIRATION);
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
+                .compact();
+    }
+
+    public boolean validateRefreshToken(String refreshToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SecurityConstants.JWT_SECRET)
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+            Date expiration = claims.getExpiration();
+            Date currentDate = new Date();
+            return !expiration.before(currentDate);
+        } catch (Exception ex) {
+            return false;
         }
     }
 
