@@ -1,15 +1,21 @@
 package com.kell.service.impl;
 
-import com.kell.model.*;
-import com.kell.repository.*;
+import com.kell.config.security.AuthoritiesConstants;
+import com.kell.config.security.jwt.JwtUtils;
+import com.kell.model.Account;
+import com.kell.model.Authority;
+import com.kell.model.Cart;
+import com.kell.model.Profile;
+import com.kell.repository.AccountRepository;
+import com.kell.repository.AuthorityRepository;
+import com.kell.repository.CartRepository;
+import com.kell.repository.ProfileRepository;
 import com.kell.service.AuthService;
 import com.kell.webapp.dto.request.LoginRequest;
 import com.kell.webapp.dto.request.SignupRequest;
 import com.kell.webapp.dto.response.JwtResponse;
 import com.kell.webapp.exception.EntityNotFoundException;
 import com.kell.webapp.exception.ServiceException;
-import com.kell.config.security.AuthoritiesConstants;
-import com.kell.config.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +29,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,15 +56,15 @@ public class AuthServiceImpl implements AuthService {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwtToken = jwtUtils.generateJwtToken(authentication);
-
+            String jwtAccessToken = jwtUtils.generateJwtAccessToken(authentication);
+            String jwtRefreshToken = jwtUtils.generateRefreshToken(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             List<String> authorities = userDetails.getAuthorities()
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
 
-            return new JwtResponse(jwtToken, "Bearer", userDetails.getUsername(), authorities);
+            return new JwtResponse(jwtAccessToken, jwtRefreshToken, "Bearer", userDetails.getUsername(), authorities);
 
         } catch (AuthenticationException authenticationException) {
             throw new ServiceException("Username or password is invalid", "err.authorize.unauthorized");

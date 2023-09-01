@@ -2,9 +2,10 @@ package com.kell.service;
 
 
 import com.kell.webapp.dto.ProfileDto;
-
-import java.util.List;
+import com.kell.webapp.dto.request.ProfileRequest;
 
 public interface ProfileService {
     ProfileDto getUserProfile();
+
+    void updateProfile(ProfileRequest profileReq);
 }

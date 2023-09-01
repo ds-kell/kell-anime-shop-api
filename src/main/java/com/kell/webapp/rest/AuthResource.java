@@ -21,9 +21,9 @@ public class AuthResource {
 
     private final AuthService authService;
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<Response> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest){
-        return ResponseUtils.ok(authService.authenticateAccount(loginRequest));
+        return ResponseUtils.ok("success", authService.authenticateAccount(loginRequest));
     }
     @PostMapping("/signup")
     public ResponseEntity<Response> registerAccount(@Valid @RequestBody SignupRequest signupRequest){
