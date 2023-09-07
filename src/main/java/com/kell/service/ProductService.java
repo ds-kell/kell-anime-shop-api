@@ -1,7 +1,6 @@
 package com.kell.service;
 
 
-import com.kell.model.Product;
 import com.kell.webapp.dto.ProductDetailDto;
 import com.kell.webapp.dto.ProductDto;
 
@@ -13,5 +12,5 @@ public interface ProductService {
 
     List<ProductDto> getProducts();
 
-
+    List<ProductDto> getProductPaging();
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface BillRepository extends JpaRepository<Bill, Integer> {
     List<Bill> findByAccount_Username(String username);
-//    @Query(value = "SELECT * FROM bills WHERE payment_time Like %?1%", nativeQuery = true)
-//    List<Bill> findByPaymentTimeByYear(@Param("paymentTime") String eventDate);
+
+    @Query(value = "SELECT * FROM bills WHERE payment_time Like %?1%", nativeQuery = true)
+    List<Bill> findByPaymentTimeByYear(@Param("paymentTime") String eventDate);
 }

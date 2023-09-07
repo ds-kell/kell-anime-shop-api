@@ -1,7 +1,6 @@
 package com.kell.service.impl;
 
 
-import com.kell.model.Product;
 import com.kell.repository.ProductDetailRepository;
 import com.kell.repository.ProductRepository;
 import com.kell.service.ProductService;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +30,13 @@ public class ProductServiceImpl implements ProductService {
                 .map(e -> mappingHelper.map(e, ProductDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public List<ProductDto> getProductPaging() {
+        return null;
+    }
+
     @Override
     @Transactional
     public List<ProductDetailDto> getProductDetailsByProductId(Integer productId) {
