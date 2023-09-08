@@ -105,4 +105,13 @@ public class AuthServiceImpl implements AuthService {
             cartRepository.save(Cart.builder()
                     .account(account).build());
     }
+
+    @Override
+    public String verifyExpiration(String refreshToken) {
+        if (jwtUtils.validateRefreshToken(refreshToken)) {
+            return refreshToken;
+        } else {
+            throw new ServiceException("Login session has expired", "err.token.expired");
+        }
+    }
 }

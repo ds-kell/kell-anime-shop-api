@@ -1,16 +1,13 @@
 package com.kell.service.impl;
 
 
-import com.kell.model.Bill;
 import com.kell.model.Product;
-import com.kell.model.ProductDetail;
 import com.kell.repository.ProductDetailRepository;
 import com.kell.repository.ProductRepository;
 import com.kell.service.ProductService;
 import com.kell.service.utils.MappingHelper;
 import com.kell.webapp.dto.ProductDetailDto;
 import com.kell.webapp.dto.ProductDto;
-import com.kell.webapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,6 +42,13 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public List<ProductDto> getProductPaging() {
+        return null;
+    }
+
     @Override
     @Transactional
     public List<ProductDetailDto> getProductDetailsByProductId(Integer productId) {
