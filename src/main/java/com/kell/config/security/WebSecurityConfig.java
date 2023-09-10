@@ -35,7 +35,8 @@ public class WebSecurityConfig {
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/admin/auth/**").permitAll()
                 .antMatchers("/api/user/auth/**").permitAll()
-                .antMatchers( "/configuration/ui",
+                .antMatchers("/api/products/auth/**").permitAll()
+                .antMatchers("/configuration/ui",
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/swagger-resources/**",
@@ -49,6 +50,7 @@ public class WebSecurityConfig {
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers(
@@ -60,6 +62,7 @@ public class WebSecurityConfig {
 //                "/webjars/**"
         );
     }
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
