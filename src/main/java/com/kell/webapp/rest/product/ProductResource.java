@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 @RequiredArgsConstructor
 @CrossOrigin
 public class ProductResource {
     private final ProductService productService;
-    @PostMapping("/products")
+
+    @PostMapping("")
     public ResponseEntity<?> getProducts() {
         return ResponseUtils.ok(productService.getProducts());
     }
