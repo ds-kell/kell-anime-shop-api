@@ -23,4 +23,9 @@ public class ProductResource {
     public ResponseEntity<?> getProductDetail(@PathVariable Integer productId) {
         return ResponseUtils.ok(productService.getProductDetailsByProductId(productId));
     }
+
+    @GetMapping("brand/{brandId}")
+    public ResponseEntity<?> getProductByBrand(@PathVariable Integer brandId) {
+        return ResponseUtils.ok(productService.getProductByBrandId(brandId));
+    }
 }

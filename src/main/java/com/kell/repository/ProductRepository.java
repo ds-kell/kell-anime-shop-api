@@ -13,4 +13,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = "SELECT * FROM products LIMIT ?1", nativeQuery = true)
     List<Product> getProductsByNumberPage(@Param("numberProduct") int numberProduct);
 
+    List<Product> findAllByBrand_Id(Integer brandId);
+
 }

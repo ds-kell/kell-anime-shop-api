@@ -10,6 +10,8 @@ public interface ProductService {
 
     List<ProductDetailDto>getProductDetailsByProductId(Integer productId);
 
+    List<ProductDto> getProductByBrandId(Integer brandId);
+
     List<ProductDto> getProducts();
 
     List<ProductDto> getProductPaging();
