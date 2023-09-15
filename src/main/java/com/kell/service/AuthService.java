@@ -10,6 +10,6 @@ public interface AuthService {
 
     void registerAccount(SignupRequest signupRequest);
 
-    String verifyExpiration(String refreshToken);
+    JwtResponse verifyExpiration(String refreshToken);
 
 }

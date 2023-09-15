@@ -28,6 +28,17 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String generateJwtAccessToken(String username) {
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
+                .compact();
+    }
+
     public String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConstants.JWT_SECRET)
@@ -45,8 +56,7 @@ public class JwtUtils {
         }
     }
 
-    public String generateRefreshToken(Authentication authentication) {
-        String username = authentication.getName();
+    public String generateRefreshToken(String username) {
         Date expireDate = new Date(System.currentTimeMillis() + SecurityConstants.REFRESH_TOKEN_EXPIRATION);
         return Jwts.builder()
                 .setSubject(username)
@@ -55,7 +65,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    public boolean validateRefreshToken(String refreshToken) {
+    public String validateRefreshToken(String refreshToken) {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(SecurityConstants.JWT_SECRET)
@@ -63,10 +73,13 @@ public class JwtUtils {
                     .getBody();
             Date expiration = claims.getExpiration();
             Date currentDate = new Date();
-            return !expiration.before(currentDate);
+            if (!expiration.before(currentDate)) {
+                return claims.getSubject();
+            } else {
+                return null;
+            }
         } catch (Exception ex) {
-            return false;
+            return null;
         }
     }
-
 }

@@ -25,7 +25,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private  UserDetailServiceImpl userDetailService;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -49,7 +48,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e){
             log.error("Cannot set user authentication: {}", e);
         }
-
         filterChain.doFilter(request, response);
     }
 
