@@ -1,6 +1,5 @@
 package com.kell.webapp.dto;
 
-import com.kell.model.Product;
 import com.kell.model.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

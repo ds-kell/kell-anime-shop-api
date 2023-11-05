@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final CartRepository cartRepository;
     private final ProfileRepository profileRepository;
+
     @Override
     @Transactional
     public JwtResponse authenticateAccount(LoginRequest loginRequest) {
@@ -57,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwtAccessToken = jwtUtils.generateJwtAccessToken(authentication);
-            String jwtRefreshToken = jwtUtils.generateRefreshToken(authentication);
+            String jwtRefreshToken = jwtUtils.generateRefreshToken(loginRequest.getUsername());
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             List<String> authorities = userDetails.getAuthorities()
                     .stream()
@@ -107,11 +109,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String verifyExpiration(String refreshToken) {
-        if (jwtUtils.validateRefreshToken(refreshToken)) {
-            return refreshToken;
-        } else {
+    public JwtResponse verifyExpiration(String refreshToken) {
+        String username = jwtUtils.validateRefreshToken(refreshToken);
+        if (username == null || username.isEmpty()) {
             throw new ServiceException("Login session has expired", "err.token.expired");
+        } else {
+            return new JwtResponse(jwtUtils.generateJwtAccessToken(username), jwtUtils.generateRefreshToken(username), "Bearer", username, new ArrayList<>());
         }
     }
 }

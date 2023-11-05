@@ -13,4 +13,8 @@ public class JwtResponse {
     private String type;
     private String username;
     private List<String> authorities;
+
+    public JwtResponse() {
+
+    }
 }

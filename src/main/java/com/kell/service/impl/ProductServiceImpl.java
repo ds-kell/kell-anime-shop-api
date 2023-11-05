@@ -1,7 +1,6 @@
 package com.kell.service.impl;
 
 
-import com.kell.model.Product;
 import com.kell.repository.ProductDetailRepository;
 import com.kell.repository.ProductRepository;
 import com.kell.service.ProductService;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,5 +56,23 @@ public class ProductServiceImpl implements ProductService {
                     productDetailDto.setProductDto(mappingHelper.map(e.getProduct(), ProductDto.class));
                     return productDetailDto;
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<ProductDto> getProductByBrandId(Integer brandId) {
+        return productRepository.findAllByBrand_Id(brandId)
+                .stream()
+                .map(e -> {
+                    var res = mappingHelper.map(e, ProductDto.class);
+                    var productDetail = productDetailRepository.findFirstByProduct_Id(e.getId());
+                    if (productDetail.isPresent()) {
+                        res.setPrice(productDetail.get().getPrice());
+                    } else {
+                        res.setPrice(0);
+                    }
+                    return res;
+                })
+                .collect(Collectors.toList());
     }
 }
