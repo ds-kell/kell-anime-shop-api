@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class ProductResource {
     private final ProductService productService;
-    @PostMapping("/products")
+    @GetMapping("/products")
     public ResponseEntity<?> getProducts() {
         return ResponseUtils.ok(productService.getProducts());
     }
